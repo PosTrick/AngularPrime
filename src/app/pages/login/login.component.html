@@ -1,0 +1,12 @@
+<div class="main_content">
+    <span>Username</span>
+    <hr/>
+    <input type="text" pInputText [(ngModel)]="username"/>
+    <hr/>
+    <span>Password</span>
+    <hr/>
+    <input type="password" pInputText [(ngModel)]="password"/>
+    <hr/>
+    <button pButton type="button" (click)="login()" label="Accedi"></button>
+</div>
+<p-growl [value]="msgs"></p-growl>
