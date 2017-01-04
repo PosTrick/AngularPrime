@@ -1,12 +1,15 @@
-
 import {Component, OnInit} from "@angular/core";
 import {UtilityService} from "../../services/utility.service";
 import {Router} from "@angular/router";
+import { COMPANIES } from '../../mock/companies.mock';
+import {Company} from "../../model/company.model";
+
 @Component({
     templateUrl: './homepage.component.html'
 })
 export class HomepageComponent implements OnInit{
     private indextab: number = -1;
+    private companies: Company[];
 
     constructor(private utility: UtilityService, private router: Router) {
 
@@ -17,7 +20,8 @@ export class HomepageComponent implements OnInit{
             if(!result) {
                 this.router.navigate(['/login']);
             }
-        })
+        });
+        this.companies = COMPANIES;
     }
 
     onTabOpen(event): void {
@@ -25,6 +29,6 @@ export class HomepageComponent implements OnInit{
     }
 
     public goToCalendar(): void {
-        alert("Questo è l'indice aperto: " + this.indextab);
+        this.router.navigate(['/calendar', this.companies[this.indextab].name]);
     }
 }

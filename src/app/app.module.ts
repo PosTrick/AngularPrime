@@ -7,6 +7,7 @@ import {AppComponent} from './app.component';
 import {LoginComponent} from "./pages/login/login.component";
 import {HomepageComponent} from "./pages/homepage/homepage.component";
 import {HeaderComponent} from "./pages/common/header.component";
+import {CalendarCompanyComponent} from "./pages/details/calendar_company.component";
 
 import {RoutingModule} from './app.routes';
 
@@ -23,6 +24,7 @@ import {InputTextModule, ButtonModule, GrowlModule, AccordionModule} from 'prime
         LoginComponent,
         HomepageComponent,
         HeaderComponent,
+        CalendarCompanyComponent,
     ],
     imports: [
         BrowserModule,
