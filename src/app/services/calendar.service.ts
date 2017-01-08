@@ -1,20 +1,17 @@
 import {Injectable} from "@angular/core";
-import {CalCompanies} from "../model/cal_companies.model";
-import {CALCOMPANIES} from "../mock/cal_companies.mock";
+import {Http} from '@angular/http';
+import 'rxjs/add/operator/toPromise';
 
 @Injectable()
 export class CalendarService {
 
-    getCalendar(name: string): Promise<CalCompanies> {
+    constructor(private http: Http) {
 
-        let company: CalCompanies = null;
-        CALCOMPANIES.forEach(element => {
-            if(element.name_company === name) {
-                company = element;
-                return false;
-            }
-        });
-        return Promise.resolve(company);
+    }
+
+    getCalendar(): Promise<any> {
+        return this.http.get('http://www.mocky.io/v2/586c2fb1110000f51c2e0ea7')
+            .toPromise();
     }
 
 }

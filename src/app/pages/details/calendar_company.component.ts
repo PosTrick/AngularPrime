@@ -27,7 +27,6 @@ export class CalendarCompanyComponent implements OnInit {
                 this.router.navigate(['/login']);
             }
         });
-
         this.subscription = this.activatedRoute.params.subscribe(
             (param: any) => {
                 this.calendarName = param['name'];
@@ -45,7 +44,18 @@ export class CalendarCompanyComponent implements OnInit {
         }
         this.map = new google.maps.Map(mapCanvas, mapOptions);
 
-        this.calService.getCalendar(this.calendarName).then((company: CalCompanies) => {
+        this.calService.getCalendar().then((response: any) => {
+
+            //Avvalorare company dal servizio trovando quello che ci serve
+            let company: CalCompanies = null;
+            let companies = response.json();
+            companies.forEach(element => {
+               if(element.name_company === this.calendarName) {
+                   company = element;
+                   return false;
+               }
+            });
+
             var mapOptions = {
                 center: new google.maps.LatLng(company.markers[0].lat,company.markers[0].lng),
                 zoom: 10
