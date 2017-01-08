@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 import {Router, ActivatedRoute} from '@angular/router';
 import {CalendarService} from "../../services/calendar.service";
 import {CalCompanies} from "../../model/cal_companies.model";
+import {UtilityService} from "../../services/utility.service";
 
 declare var google: any;
 
@@ -15,12 +16,18 @@ export class CalendarCompanyComponent implements OnInit {
     private subscription: Subscription;
     private map: any;
 
-    constructor(private activatedRoute: ActivatedRoute, private router: Router,
-                    private calService: CalendarService) {
+    constructor(private activatedRoute: ActivatedRoute,private utility: UtilityService,
+                private router: Router, private calService: CalendarService) {
 
     }
 
     ngOnInit(): void {
+        this.utility.isLogged().then((result: boolean) => {
+            if (!result) {
+                this.router.navigate(['/login']);
+            }
+        });
+
         this.subscription = this.activatedRoute.params.subscribe(
             (param: any) => {
                 this.calendarName = param['name'];
