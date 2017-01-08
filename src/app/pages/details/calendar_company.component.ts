@@ -1,6 +1,10 @@
 import {Component, OnInit} from "@angular/core";
 import { Subscription } from 'rxjs';
 import {Router, ActivatedRoute} from '@angular/router';
+import {CalendarService} from "../../services/calendar.service";
+import {CalCompanies} from "../../model/cal_companies.model";
+
+declare var google: any;
 
 @Component({
     templateUrl: './calendar_company.component.html'
@@ -9,8 +13,10 @@ export class CalendarCompanyComponent implements OnInit {
 
     private calendarName: string;
     private subscription: Subscription;
+    private map: any;
 
-    constructor(private activatedRoute: ActivatedRoute, private router: Router) {
+    constructor(private activatedRoute: ActivatedRoute, private router: Router,
+                    private calService: CalendarService) {
 
     }
 
@@ -19,5 +25,55 @@ export class CalendarCompanyComponent implements OnInit {
             (param: any) => {
                 this.calendarName = param['name'];
             })
+        this.initMap();
+    }
+
+    public initMap(): void {
+        var mapCanvas = document.getElementById("map");
+        var marker = new google.maps.Marker();
+        var myCenter = new google.maps.LatLng(0,0);
+        var mapOptions = {
+            center: myCenter,
+            zoom: 10
+        }
+        this.map = new google.maps.Map(mapCanvas, mapOptions);
+
+        this.calService.getCalendar(this.calendarName).then((company: CalCompanies) => {
+            var mapOptions = {
+                center: new google.maps.LatLng(company.markers[0].lat,company.markers[0].lng),
+                zoom: 10
+            }
+            this.map = new google.maps.Map(mapCanvas, mapOptions);
+            //Click sulla mappa
+            this.map.addListener('click', (event) => {
+                alert('Latitudine: ' + event.latLng.lat() + '\nLongitudine: ' + event.latLng.lng());
+            });
+
+            company.markers.forEach(el => {
+                if(el !== undefined) {
+                    marker = new google.maps.Marker({
+                        position: new google.maps.LatLng(el.lat,el.lng),
+                        map: this.map,
+                        title: el.description,
+                        animation: google.maps.Animation.BOUNCE
+                    });
+                    google.maps.event.addListener(marker, 'click', (function(marker) {
+                        var infowindow = new google.maps.InfoWindow();
+                        return function() {
+                            infowindow.setContent(el.description);
+                            infowindow.open(this.map, marker);
+                        }
+                    })(marker));
+                }
+            });
+            marker.setMap(this.map);
+        })
+    }
+
+    zoomIn() {
+        this.map.setZoom(this.map.getZoom() + 1);
+    }
+    zoomOut() {
+        this.map.setZoom(this.map.getZoom() - 1);
     }
 }

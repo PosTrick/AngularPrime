@@ -14,6 +14,7 @@ import {RoutingModule} from './app.routes';
 //Services
 import {AuthService} from './services/auth.service';
 import {UtilityService} from './services/utility.service';
+import {CalendarService} from "./services/calendar.service";
 
 //Componenti Primeng
 import {InputTextModule, ButtonModule, GrowlModule, AccordionModule} from 'primeng/primeng';
@@ -36,7 +37,7 @@ import {InputTextModule, ButtonModule, GrowlModule, AccordionModule} from 'prime
         GrowlModule,
         AccordionModule
     ],
-    providers: [AuthService, UtilityService],
+    providers: [AuthService, UtilityService, CalendarService],
     bootstrap: [AppComponent]
 })
 export class AppModule {
